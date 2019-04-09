@@ -12,6 +12,7 @@ import chao.app.hierarchy.HierarchyFilter;
 import chao.app.hierarchy.HierarchyResult;
 import chao.app.hierarchy.HierarchyResultAction;
 import chao.app.hierarchy.R;
+import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -134,6 +135,37 @@ public class HierarchyTest {
             }
         });
         checker.checkout();
+    }
+
+    ArrayList<Integer> ids = new ArrayList<>();
+
+    @Test
+    public void testHierarchyTraversalDeep() {
+        ids.add(R.id.plugins);
+        ids.add(R.id.drawer_layout);
+        ids.add(R.id.ami_content);
+        ids.add(R.id.drawer_component_content);
+
+        ids.add(R.id.ami_content_fps);
+        ids.add(R.id.ami_content_app_info);
+        ids.add(R.id.ami_content_app_display);
+
+        ids.add(R.id.ui_list);
+        ids.add(R.id.component);
+
+        ids.add(R.id.drawer_plugins_tab_layout);
+        ids.add(R.id.drawer_plugins_view_pager);
+        ids.add(R.id.ami_useless_tip_view);
+
+        Hierarchy.of(view).root().descendants().deep(2).forEach(new HierarchyAction<View>() {
+            @Override
+            public boolean action(View view) {
+                Assert.assertTrue(ids.contains(view.getId()));
+                ids.remove((Integer) view.getId());
+                return false;
+            }
+        });
+        Assert.assertEquals(0, ids.size());
     }
 
 

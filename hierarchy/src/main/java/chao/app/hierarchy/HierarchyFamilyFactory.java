@@ -110,7 +110,7 @@ public class HierarchyFamilyFactory<V> {
      * @return 所有子孙节点
      */
     @SuppressWarnings("unused | WeakerAccess")
-    public HierarchyFamily<V> descendants() {
+    public HierarchyFamily<V> descendants(final int maxDeep) {
         return new HierarchyFamily<>(new Itr<V>() {
 
             private ArrayList<V> descendants = new ArrayList<>();
@@ -123,7 +123,7 @@ public class HierarchyFamilyFactory<V> {
                 index = -1;
                 descendants.clear();
                 descendants.add(mNode.value());
-                merge(mNode.value());
+                merge(mNode.value(), 0);
                 size = descendants.size();
             }
 
@@ -144,11 +144,14 @@ public class HierarchyFamilyFactory<V> {
                 return descendants.get(index);
             }
 
-            private void merge(V node) {
+            private void merge(V node, int deep) {
                 List<V> children = mNodeFactory.getHierarchyNode(node).children();
                 descendants.addAll(children);
+                deep++;
                 for (V child: children) {
-                    merge(child);
+                    if (deep < maxDeep) {
+                        merge(child, deep);
+                    }
                 }
             }
         });

@@ -14,6 +14,8 @@ public class HierarchyBuilder<V> {
 
     private int traversalType = TRAVERSAL_BREADTH_FIRST;
 
+    int traversalDeep = Integer.MAX_VALUE;
+
     FamilyEnum family = FamilyEnum.self;
 
     HierarchyFilter<V> filter;
@@ -40,6 +42,11 @@ public class HierarchyBuilder<V> {
 
     public HierarchyBuilder<V> deepFirst() {
         traversalType = TRAVERSAL_DEEP_FIRST;
+        return this;
+    }
+
+    public HierarchyBuilder<V> deep(int deep) {
+        traversalDeep = deep;
         return this;
     }
 

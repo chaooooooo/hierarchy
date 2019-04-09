@@ -78,7 +78,7 @@ public class Hierarchy<V> implements IHierarchy<V>{
                 family = mFamilyFactory.all();
                 break;
             case descendants:
-                family = mFamilyFactory.descendants();
+                family = mFamilyFactory.descendants(mBuilder.traversalDeep);
                 break;
             case brothers:
                 family = mFamilyFactory.brothers();
