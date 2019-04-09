@@ -1,7 +1,6 @@
 package chao.app.hierarchy;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -15,14 +14,14 @@ public class HierarchyStrategy {
 
     private Map<Class<?>, Class<? extends HierarchyNode<?>>> mStrategyNodes = new HashMap<>();
 
-    public HierarchyStrategy() {
 
+    public HierarchyStrategy() {
     }
 
 
-    <V> HierarchyNode<V> findTypeNode(V v, Class<V> type) {
+    <V> HierarchyNode<V> findTypeNode(V v, Class<V> type, HierarchyNodeFactory<V> factory) {
         if (v == null) {
-            return new HierarchyEmptyNode<>();
+            return factory.getOrCreateHierarchyEmptyNode();
         }
         Class tClazz = type;
         Class<? extends HierarchyNode<?>> nClass = null;
@@ -43,7 +42,7 @@ public class HierarchyStrategy {
         }
 
         if (nClass == null) {
-            return null;
+            return factory.getOrCreateHierarchyEmptyNode();
         }
 
         checkType(v, nClass);
@@ -62,12 +61,8 @@ public class HierarchyStrategy {
             }
             try {
                 hierarchyNode = (HierarchyNode) constructor.newInstance(v);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+            } catch (Throwable e) {
+                return factory.getOrCreateHierarchyEmptyNode();
             }
         }
 

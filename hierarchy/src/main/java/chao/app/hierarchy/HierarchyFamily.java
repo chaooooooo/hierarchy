@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class HierarchyFamily<V> implements Iterable<HierarchyNode<V>> {
+public class HierarchyFamily<V> implements Iterable<V> {
 
     private Itr<V> itr;
 
@@ -13,12 +13,12 @@ public class HierarchyFamily<V> implements Iterable<HierarchyNode<V>> {
         this.itr = itr;
     }
 
-    @NonNull List<HierarchyNode<V>> members(HierarchyFilter<V> filter) {
+    @NonNull List<V> members(HierarchyFilter<V> filter) {
         if (filter == null) {
             filter = new HierarchyFilter.AllAllowFilter<>();
         }
-        List<HierarchyNode<V>> members = new ArrayList<>();
-        for (HierarchyNode<V> node: this) {
+        List<V> members = new ArrayList<>();
+        for (V node: this) {
             if (filter.filter(node)) {
                 members.add(node);
             }
@@ -28,16 +28,20 @@ public class HierarchyFamily<V> implements Iterable<HierarchyNode<V>> {
 
     @NonNull
     @Override
-    public Iterator<HierarchyNode<V>> iterator() {
+    public Iterator<V> iterator() {
         itr.onCreate();
-        return new Iterator<HierarchyNode<V>>() {
+        return new Iterator<V>() {
             @Override
             public boolean hasNext() {
-                return itr.hasNext();
+                boolean hasNext = itr.hasNext();
+                if (!hasNext) {
+                    itr.onDestroy();
+                }
+                return hasNext;
             }
 
             @Override
-            public HierarchyNode<V> next() {
+            public V next() {
                 return itr.next();
             }
         };

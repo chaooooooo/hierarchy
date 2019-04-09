@@ -5,12 +5,12 @@ package chao.app.hierarchy;
  * @since 2019/4/6
  */
 public interface HierarchyFilter<V> {
-    boolean filter(HierarchyNode<V> hierarchyNode);
+    boolean filter(V v);
 
     class AllAllowFilter<V> implements HierarchyFilter<V> {
 
         @Override
-        public boolean filter(HierarchyNode<V> hierarchyNode) {
+        public boolean filter(V hierarchyNode) {
             return true;
         }
     }

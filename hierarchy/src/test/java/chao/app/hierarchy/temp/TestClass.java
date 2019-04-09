@@ -1,5 +1,7 @@
-package chao.app.hierarchy;
+package chao.app.hierarchy.temp;
 
+import chao.app.hierarchy.HierarchyNode;
+import chao.app.hierarchy.ViewHierarchyNode;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;

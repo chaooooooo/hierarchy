@@ -2,18 +2,19 @@ package chao.app.hierarchy;
 
 /**
  * @author qinchao
- * @since 2019/4/5
+ * @since 2019/4/9
  */
 public abstract class AbstractHierarchyNode<V> implements HierarchyNode<V> {
 
-    private V value;
+    private V mV;
 
     public AbstractHierarchyNode(V v) {
-        this.value = v;
+        mV = v;
     }
 
     @Override
     public V value() {
-        return value;
+        return mV;
     }
+
 }

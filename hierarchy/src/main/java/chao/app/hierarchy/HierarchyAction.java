@@ -5,5 +5,5 @@ package chao.app.hierarchy;
  * @since 2019/4/6
  */
 public interface HierarchyAction<V> {
-    boolean action(HierarchyNode<V> t);
+    boolean action(V v);
 }

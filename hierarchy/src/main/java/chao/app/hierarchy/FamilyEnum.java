@@ -1,5 +1,5 @@
 package chao.app.hierarchy;
 
 enum FamilyEnum {
-    all, descendants, ancestors, brothers, children
+    all, descendants, ancestors, brothers, children, parent, root, self
 }

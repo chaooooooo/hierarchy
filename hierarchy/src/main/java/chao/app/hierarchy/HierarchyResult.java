@@ -1,24 +1,21 @@
 package chao.app.hierarchy;
 
-public class HierarchyResult<R> {
+public class HierarchyResult<Result> {
 
-    private R mDefaultValue;
+    private Result mResult;
 
-    private R mR;
-
-    public void setResult(R r) {
-        mR = r;
+    public void setResult(Result result) {
+        mResult = result;
     }
 
-    public HierarchyResult<R> defaultValue(R v) {
-        mDefaultValue = v;
-        return this;
-    }
-
-    public R result() {
-        if (mR != null) {
-            return mR;
+    public Result result(Result defaultResult) {
+        if (mResult != null) {
+            return mResult;
         }
-        return mDefaultValue;
+        return defaultResult;
+    }
+
+    public Result result() {
+        return mResult;
     }
 }

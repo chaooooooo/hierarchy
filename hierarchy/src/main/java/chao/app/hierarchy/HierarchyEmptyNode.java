@@ -1,36 +1,32 @@
 package chao.app.hierarchy;
 
+import android.support.annotation.NonNull;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author qinchao
- * @since 2019/4/6
+ * @since 2019/4/9
  */
 public class HierarchyEmptyNode<V> extends AbstractHierarchyNode<V> {
-
-    private HierarchyEmptyNode emptyNode;
 
     public HierarchyEmptyNode() {
         super(null);
     }
 
     @Override
-    public HierarchyNode<V> parent() {
-        return empty();
+    public V parent() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public List<V> children() {
+        return new ArrayList<>();
     }
 
     @Override
-    public HierarchyNode<V>[] children() {
-        return new HierarchyNode[0];
-    }
-
-    @Override
-    public HierarchyNode<V> childAt(int index) {
-        return empty();
-    }
-
-    private HierarchyNode<V> empty() {
-        if (emptyNode == null) {
-            emptyNode = new HierarchyEmptyNode<>();
-        }
-        return emptyNode;
+    public V childAt(int index) {
+        return null;
     }
 }

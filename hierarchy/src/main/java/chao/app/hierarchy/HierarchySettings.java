@@ -1,6 +1,7 @@
 package chao.app.hierarchy;
 
 import android.view.View;
+import chao.app.hierarchy.impl.ViewNode;
 
 /**
  * @author qinchao
@@ -22,7 +23,8 @@ public class HierarchySettings {
 
     private HierarchySettings() {
         mStrategy = new HierarchyStrategy();
-        mStrategy.registerHierarchy(View.class, ViewHierarchyNode.class);
+        mStrategy.registerHierarchy(View.class, ViewNode.class);
+//        mStrategy.registerHierarchy(File.class, FileHierarchyNode.class);
     }
 
 

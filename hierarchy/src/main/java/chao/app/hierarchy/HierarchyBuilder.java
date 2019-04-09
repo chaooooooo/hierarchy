@@ -1,7 +1,6 @@
 package chao.app.hierarchy;
 
 import android.support.annotation.NonNull;
-import java.util.List;
 
 public class HierarchyBuilder<V> {
 
@@ -9,23 +8,29 @@ public class HierarchyBuilder<V> {
 
     private static final int TRAVERSAL_BREADTH_FIRST = 2;
 
+    final HierarchyNodeFactory<V> mNodeFactory;
+
+    final HierarchyFamilyFactory<V> mFamilyFactory;
+
     private int traversalType = TRAVERSAL_BREADTH_FIRST;
 
-    FamilyEnum family;
+    FamilyEnum family = FamilyEnum.self;
 
     HierarchyFilter<V> filter;
 
-    V mV;
+    HierarchyNode<V> mNode;
 
     Class<V> mType;
 
-    public HierarchyBuilder(V v) {
-        mV = v;
+    HierarchyBuilder(V v) {
+        this(v, null);
     }
 
-    public <T extends V> HierarchyBuilder(T value, Class<V> clazz) {
-        mV = value;
+    <T extends V> HierarchyBuilder(T value, Class<V> clazz) {
         mType = clazz;
+        mNodeFactory = new HierarchyNodeFactory<>(HierarchySettings.instance().mStrategy, mType);
+        mNode = mNodeFactory.getHierarchyNode(value);
+        mFamilyFactory = new HierarchyFamilyFactory<>(mNodeFactory, mNode);
     }
 
     public HierarchyBuilder breadthFirst() {
@@ -69,16 +74,20 @@ public class HierarchyBuilder<V> {
     }
 
     public HierarchyBuilder<V> root() {
-        return new HierarchyBuilder<>(build().root().value());
+        return new HierarchyBuilder<>(mFamilyFactory.root().get(), mType);
     }
 
     public HierarchyBuilder<V> parent() {
-        return new HierarchyBuilder<>(build().parent().value());
+        return new HierarchyBuilder<>(mFamilyFactory.parent().get(), mType);
+    }
+
+    public HierarchyNode<V> selfNode() {
+        return mNode;
     }
 
     @NonNull
-    public Hierarchy<V> build() {
-        if (mV == null) {
+    public IHierarchy<V> build() {
+        if (mNode.value() == null) {
             return new HierarchyEmpty<>();
         }
         return new Hierarchy<>(this);
@@ -87,18 +96,21 @@ public class HierarchyBuilder<V> {
 
     public void forEach(HierarchyAction<V> action) {
         HierarchyFamily<V> family = build().getFamily();
-        for (HierarchyNode<V> hierarchyNode : family) {
-            if (action.action(hierarchyNode)) {
+        for (V v: family) {
+            if (action.action(v)) {
                 break;
             }
         }
     }
 
-    public HierarchyNode<V> firstNode() {
-        return allNodes().get(0);
-    }
-
-    public List<HierarchyNode<V>> allNodes() {
-        return build().getFamily().members(new HierarchyFilter.AllAllowFilter<V>());
+    public <Result> HierarchyResult<Result> forEach(HierarchyResultAction<V, Result> action) {
+        HierarchyFamily<V> family = build().getFamily();
+        HierarchyResult<Result> result = new HierarchyResult<>();
+        for (V v : family) {
+            if (action.action(v, result)) {
+                break;
+            }
+        }
+        return result;
     }
 }
